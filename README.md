@@ -1,2 +1,2 @@
-# courier-location-tracker
-courier location tracker app for case study
+# courier_tracking
+courier tracking api
