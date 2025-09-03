@@ -25,8 +25,8 @@ public class CourierController {
     private final EventService eventService;
     @PostMapping("/save/location")
     public ResponseEntity<LocationEntity> saveCourierLocation(@RequestBody LocationDTO locationDTO){
-        eventService.checkAndPublishEntranceEvent(locationDTO.getCourierId(), locationDTO.getLat(), locationDTO.getLng());
         Optional<LocationEntity> location = locationService.saveCourierLocation(locationDTO);
+        eventService.checkAndPublishEntranceEvent(locationDTO.getCourierId(), locationDTO.getLat(), locationDTO.getLng());
         return location.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }

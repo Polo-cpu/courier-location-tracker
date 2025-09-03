@@ -30,10 +30,10 @@ public class EventService {
     private static final Double DISTANCE_THRESHOLD_METERS = 100.0;
 
     public void checkAndPublishEntranceEvent(Long courierId, Double lat, Double lng) {
+
         List<DummyLocationDTO> storeLocations = this.dummyLocationLoader.getLocations();
         for (DummyLocationDTO store : storeLocations) {
             Double distance = geoUtils.calculateDistanceForMeters(lat, lng, store.getLat(), store.getLng());
-
             if (distance <= DISTANCE_THRESHOLD_METERS) {
                 Optional<EventEntity> latestEventOpt = eventRepository.findFirstByCourierIdOrderByEventTimeDesc(courierId);
                 CourierEvent newEvent = new CourierEvent(

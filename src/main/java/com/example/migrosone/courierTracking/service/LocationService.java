@@ -1,12 +1,13 @@
 package com.example.migrosone.courierTracking.service;
 
+import com.example.migrosone.courierTracking.exception.CourierNotFoundException;
 import com.example.migrosone.courierTracking.model.dto.LocationDTO;
+import com.example.migrosone.courierTracking.model.dummy.MessageCodes;
 import com.example.migrosone.courierTracking.model.entity.CourierEntity;
 import com.example.migrosone.courierTracking.model.entity.LocationEntity;
 import com.example.migrosone.courierTracking.model.mapper.LocationMapper;
 import com.example.migrosone.courierTracking.repository.CourierRepository;
 import com.example.migrosone.courierTracking.repository.LocationRepository;
-import com.example.migrosone.courierTracking.utils.DummyLocationLoader;
 import com.example.migrosone.courierTracking.utils.GeoUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,19 +19,16 @@ import java.util.Optional;
 public class LocationService {
 
     private final LocationRepository locationRepository;
-
     private final CourierRepository courierRepository;
     private final LocationMapper locationMapper;
     private final GeoUtils geoUtils;
-    private final DummyLocationLoader dummyLocationLoader;
 
-    public LocationService(LocationRepository locationRepository, CourierRepository courierRepository, LocationMapper locationMapper, GeoUtils geoUtils,
-                           DummyLocationLoader dummyLocationLoader) {
+    public LocationService(LocationRepository locationRepository, CourierRepository courierRepository,
+                           LocationMapper locationMapper, GeoUtils geoUtils) {
         this.locationRepository = locationRepository;
         this.courierRepository = courierRepository;
         this.locationMapper = locationMapper;
         this.geoUtils = geoUtils;
-        this.dummyLocationLoader = dummyLocationLoader;
     }
 
 
@@ -54,10 +52,12 @@ public class LocationService {
     @Transactional
     public Optional<LocationEntity> saveCourierLocation(LocationDTO locationDTO) {
         LocationEntity location = locationMapper.toEntity(locationDTO);
-        CourierEntity courier = courierRepository.findById(locationDTO.getCourierId())
-                .orElseThrow(() -> new IllegalArgumentException("Courier not found with id: "
-                        + locationDTO.getCourierId()));
-        location.setCourier(courier);
-        return Optional.of(locationRepository.save(location));
+        Optional<CourierEntity> courier = courierRepository.findByCourierId(locationDTO.getCourierId());
+        if (courier.isEmpty()) {
+            throw new CourierNotFoundException(MessageCodes.COURIER_NOT_FOUND);
+        }else {
+            location.setCourier(courier.get());
+            return Optional.of(locationRepository.save(location));
+        }
     }
 }

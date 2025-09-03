@@ -26,5 +26,7 @@ public class EventEntity {
     private String eventName;
     @Column(name = "EVENT_TIME")
     private LocalDateTime eventTime = LocalDateTime.now();
+    @Column(name = "STORE_NAME")
+    private String storeName;
 
 }

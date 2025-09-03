@@ -11,4 +11,5 @@ import java.util.UUID;
 
 @Repository
 public interface CourierRepository extends JpaRepository<CourierEntity, Long> {
+    Optional<CourierEntity> findByCourierId(Long courierId);
 }
