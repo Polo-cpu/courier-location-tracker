@@ -1,2 +1,53 @@
-# courier_tracking
-courier tracking api
+# Courier Tracking API
+A Spring Boot Rest API for tracking courier geolocation.
+
+🚀 Features
+- Create, Read, Update, Delete (CRUD) operations for couriers
+- Tracking courier geolocation
+- RESTful API endpoints
+- In-memory database for simplicity
+- Swagger UI for API documentation
+- Unit tests for core functionality
+- Integration Tests for end-to-end validation
+- Dockerized for easy deployment
+
+🛠️ Tech Stack
+- Java 17
+- Spring Boot 3
+- H2 Database
+- Spring Data JPA
+- Swagger
+- Docker
+
+⚙️ Installation and Setup
+1.  Clone the repository:
+
+    `git clone https://github.com/polo-cpu/courier-tracking.git`
+
+
+2. Build & Run
+
+    `mvn clean install`
+    
+    `mvn spring-boot:run`
+
+   App runs at 👉 http://localhost:8090
+
+🔗 API Endpoints
+
+| Method | Endpoint                     | Description                                   |
+|--------|------------------------------|-----------------------------------------------|
+| POST   | `/api/courier/create`        | Register new courier                          |
+| POST   | `/api/courier/save/location` | Save current location of courier              |
+| GET    | `/api/courier/{id}`          | Get courier by ID                             |
+| GET    | `/api/totalDistance/{id}`    | Calculate total travelled distance of courier |
+
+📊 Future Improvements
+- Add authentication and authorization for courier registration (Spring Security + JWT)
+- Implement real-time tracking with Kafka or another messaging system
+- Frontend application for better user experience
+
+👨‍💻 Author
+
+Atilla Berk Demir - Software Development Engineer
+- 🔗[LinkedIn](https://www.linkedin.com/in/atilla-berk-demir/)

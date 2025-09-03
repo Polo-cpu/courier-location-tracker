@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/courier")
+@RequestMapping("/api/courier")
 @AllArgsConstructor
 public class CourierController {
     private final CourierService courierService;
