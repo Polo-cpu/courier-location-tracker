@@ -16,7 +16,7 @@ public class CourierEntity {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "COURIER_ID")
+    @Column(name = "COURIER_ID", unique = true)
     private Long courierId;
 
     @Column(name = "NAME")

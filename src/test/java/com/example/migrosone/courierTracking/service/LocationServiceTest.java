@@ -45,7 +45,7 @@ public class LocationServiceTest {
         List<LocationEntity> locations = sampleLocationList();
         CourierEntity courier = locations.get(0).getCourier();
 
-        Mockito.when(locationRepository.findAllMovesByCourierId(courier.getCourierId()))
+        Mockito.when(locationRepository.findByCourier_CourierId(courier.getCourierId()))
                 .thenReturn(locations);
         Mockito.when(geoUtils.calculateDistanceForKM(locations.get(0).getLat(), locations.get(0).getLng(),
                 locations.get(1).getLat(), locations.get(1).getLng()))
@@ -57,7 +57,7 @@ public class LocationServiceTest {
 
     @Test
     void testGetTotalTravelledDistance_EmptyList() {
-        Mockito.when(locationRepository.findAllMovesByCourierId(Mockito.anyLong()))
+        Mockito.when(locationRepository.findByCourier_CourierId(Mockito.anyLong()))
                 .thenReturn(List.of());
         Double totalDistance = locationService.getTotalTravelledDistance(1L);
         Assertions.assertEquals(0.0, totalDistance);

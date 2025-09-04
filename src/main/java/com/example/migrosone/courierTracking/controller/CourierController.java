@@ -58,8 +58,8 @@ public class CourierController {
     }
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public InternalApiResponse<Optional<CourierEntity>> getCourierById(@PathVariable Long courierId) {
-        Optional<CourierEntity> courier = courierService.findCourierById(courierId);
+    public InternalApiResponse<Optional<CourierEntity>> getCourierById(@PathVariable Long id) {
+        Optional<CourierEntity> courier = courierService.findCourierById(id);
         return InternalApiResponse.<Optional<CourierEntity>>builder()
                 .httpStatus(HttpStatus.OK)
                 .payload(courier)
@@ -71,9 +71,9 @@ public class CourierController {
                 .build();
     }
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/totalDistance/{id}")
-    public InternalApiResponse<Double> getDistanceByCourierId(@PathVariable("id") Long id){
-        var distance = locationService.getTotalTravelledDistance(id);
+    @GetMapping("/totalDistance/{courierId}")
+    public InternalApiResponse<Double> getDistanceByCourierId(@PathVariable("courierId") Long courierId){
+        var distance = locationService.getTotalTravelledDistance(courierId);
         return InternalApiResponse.<Double>builder()
                 .httpStatus(HttpStatus.OK)
                 .hasError(false)

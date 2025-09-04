@@ -84,13 +84,13 @@ class CourierControllerTest {
 
     @Test
     void testGetCourierById() throws Exception {
-        Long courierId = 1L;
+        Long courierId = 100L;
         CourierEntity courierEntity = new CourierEntity();
         courierEntity.setId(courierId);
 
         Mockito.when(courierService.findCourierById(eq(courierId))).thenReturn(Optional.of(courierEntity));
 
-        mockMvc.perform(get("/api/courier/{id}", courierId))
+        mockMvc.perform(get("/api/courier/{courierId}", courierId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.payload.id").value(courierId))
                 .andExpect(jsonPath("$.hasError").value(false));

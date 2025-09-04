@@ -24,7 +24,7 @@ public class LocationEntity {
     private LocalDateTime time = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "COURIER_ID")
+    @JoinColumn(name = "COURIER_ID", referencedColumnName = "COURIER_ID")
     private CourierEntity courier;
 
     @Column(name = "LATITUDE")

@@ -35,7 +35,7 @@ public class LocationService {
 
 
     public Double getTotalTravelledDistance(Long courierId) {
-        List<LocationEntity> locations = locationRepository.findAllMovesByCourierId(courierId);
+        List<LocationEntity> locations = locationRepository.findByCourier_CourierId(courierId);
         if (locations.isEmpty() || locations.size() < 2) {
             log.error("Not enough location data to calculate distance for courierId: {}", courierId);
             return 0.0;

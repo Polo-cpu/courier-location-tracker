@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface LocationRepository extends JpaRepository<LocationEntity, Long> {
-    List<LocationEntity> findAllMovesByCourierId(Long courierId);
+    List<LocationEntity> findByCourier_CourierId(Long courierId);
 }
