@@ -58,8 +58,8 @@ public class CourierController {
     }
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public InternalApiResponse<Optional<CourierEntity>> getCourierById(@PathVariable Long id) {
-        Optional<CourierEntity> courier = courierService.findCourierById(id);
+    public InternalApiResponse<Optional<CourierEntity>> getCourierById(@PathVariable Long courierId) {
+        Optional<CourierEntity> courier = courierService.findCourierById(courierId);
         return InternalApiResponse.<Optional<CourierEntity>>builder()
                 .httpStatus(HttpStatus.OK)
                 .payload(courier)

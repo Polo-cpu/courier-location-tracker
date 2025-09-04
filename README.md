@@ -32,12 +32,12 @@ A Spring Boot Rest API for tracking courier geolocation.
 
 🔗 API Endpoints
 
-| Method | Endpoint                          | Description                                   |
-|--------|-----------------------------------|-----------------------------------------------|
-| POST   | `/api/courier/create`             | Register new courier                          |
-| POST   | `/api/courier/save/location`      | Save current location of courier              |
-| GET    | `/api/courier/{id}`               | Get courier by ID                             |
-| GET    | `/api/courier/totalDistance/{id}` | Calculate total travelled distance of courier |
+| Method | Endpoint                        | Description                                   |
+|--------|---------------------------------|-----------------------------------------------|
+| POST   | `/api/courier/create`           | Register new courier                          |
+| POST   | `/api/courier/save/location`    | Save current location of courier              |
+| GET    | `/api/courier/{id}`             | Get courier by PK of MIG_COURIER table        |
+| GET    | `/api/courier/totalDistance/{courierId}` | Calculate total travelled distance of courier |
 | GET    | `/api/courier/events/{courierId}` | Get entrance events by courierId              |
 
 
