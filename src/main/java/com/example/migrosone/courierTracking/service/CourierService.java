@@ -46,10 +46,4 @@ public class CourierService {
             return courier;
         }
     }
-
-  //  public List<CourierEntity> getAllByCourierId() {
-  //      return courierRepository.getAllByCourierId();
-  //  }
-
-
 }
