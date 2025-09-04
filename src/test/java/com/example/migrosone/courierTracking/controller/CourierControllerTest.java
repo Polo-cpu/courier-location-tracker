@@ -102,7 +102,6 @@ class CourierControllerTest {
         locationDTO.setCourierId(100L);
         locationDTO.setLat(40.0);
         locationDTO.setLng(30.0);
-        locationDTO.setTime(LocalDateTime.now());
 
         System.out.println(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(locationDTO));
 
