@@ -4,6 +4,7 @@ import com.example.migrosone.courierTracking.model.dto.CourierDTO;
 import com.example.migrosone.courierTracking.model.dto.LocationDTO;
 import com.example.migrosone.courierTracking.model.dummy.MessageCodes;
 import com.example.migrosone.courierTracking.model.entity.CourierEntity;
+import com.example.migrosone.courierTracking.model.entity.EventEntity;
 import com.example.migrosone.courierTracking.model.entity.LocationEntity;
 import com.example.migrosone.courierTracking.response.InternalApiResponse;
 import com.example.migrosone.courierTracking.response.MessageResponse;
@@ -13,9 +14,9 @@ import com.example.migrosone.courierTracking.service.LocationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -80,6 +81,21 @@ public class CourierController {
                 .messageResponse(MessageResponse.builder()
                         .title(String.valueOf(MessageCodes.SUCCESS))
                         .description(String.valueOf(MessageCodes.TRAVELLED_DISTANCE_SUCCESSFULLY_CALCULATED))
+                        .build())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/events/{courierId}")
+    public InternalApiResponse<List<EventEntity>> getEventsByCourierId(@PathVariable("courierId") Long courierId){
+        List<EventEntity> events = eventService.getEventsByCourierId(courierId);
+        return InternalApiResponse.<List<EventEntity>>builder()
+                .httpStatus(HttpStatus.OK)
+                .hasError(false)
+                .payload(events)
+                .messageResponse(MessageResponse.builder()
+                        .title(String.valueOf(MessageCodes.SUCCESS))
+                        .description(String.valueOf(MessageCodes.EVENTS_SUCCESSFULLY_FOUNDED))
                         .build())
                 .build();
     }

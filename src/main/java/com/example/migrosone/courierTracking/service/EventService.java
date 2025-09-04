@@ -1,18 +1,18 @@
 package com.example.migrosone.courierTracking.service;
 
+import com.example.migrosone.courierTracking.exception.EventNotFoundException;
 import com.example.migrosone.courierTracking.model.dto.CourierEvent;
 import com.example.migrosone.courierTracking.model.dto.DummyLocationDTO;
+import com.example.migrosone.courierTracking.model.dummy.MessageCodes;
 import com.example.migrosone.courierTracking.model.entity.EventEntity;
 import com.example.migrosone.courierTracking.model.mapper.EventMapper;
 import com.example.migrosone.courierTracking.repository.EventRepository;
 import com.example.migrosone.courierTracking.utils.DummyLocationLoader;
 import com.example.migrosone.courierTracking.utils.GeoUtils;
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -57,6 +57,16 @@ public class EventService {
                 log.info("Entrance event published for courierId: {} at store: {}", courierId, store.getName());
                 break;
             }
+        }
+    }
+    public List<EventEntity> getEventsByCourierId(Long courierId) {
+        List<EventEntity> events = eventRepository.findByCourierId(courierId);
+        if(events.isEmpty()){
+            throw new EventNotFoundException(MessageCodes.EVENT_NOT_FOUND);
+        }
+        else{
+            log.info("Events found with courierId: {}", courierId);
+            return eventRepository.findByCourierId(courierId);
         }
     }
 }
