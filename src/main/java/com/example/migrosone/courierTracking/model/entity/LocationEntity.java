@@ -21,7 +21,7 @@ public class LocationEntity {
     private Long id;
 
     @Column(name = "TIME")
-    private LocalDateTime time = LocalDateTime.now();
+    private LocalDateTime time;
 
     @ManyToOne
     @JoinColumn(name = "COURIER_ID", referencedColumnName = "COURIER_ID")
@@ -32,6 +32,13 @@ public class LocationEntity {
 
     @Column(name = "LONGITUDE")
     private Double lng;
+
+    @PrePersist
+    public void prePersist() {
+        if (time == null) {
+            time = LocalDateTime.now();
+        }
+    }
 
 
 }
