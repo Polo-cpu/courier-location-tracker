@@ -30,6 +30,8 @@ A Spring Boot Rest API for tracking courier geolocation.
 
    App runs at 👉 http://localhost:8090
 
+   Access Swagger UI for API documentation 👉 http://localhost:8090/swagger-ui/index.html
+
 🔗 API Endpoints
 
 | Method | Endpoint                        | Description                                   |
