@@ -1,7 +1,6 @@
 package com.example.migrosone.courierTracking.exception;
 
 import com.example.migrosone.courierTracking.model.dummy.IMessageCodes;
-import com.example.migrosone.courierTracking.model.dummy.MessageCodes;
 import com.example.migrosone.courierTracking.utils.MessageUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

@@ -4,8 +4,7 @@ import com.example.migrosone.courierTracking.exception.handler.GenericExceptionH
 import com.example.migrosone.courierTracking.model.dto.CourierDTO;
 import com.example.migrosone.courierTracking.model.dto.LocationDTO;
 import com.example.migrosone.courierTracking.model.entity.CourierEntity;
-import com.example.migrosone.courierTracking.model.entity.LocationEntity;
-import com.example.migrosone.courierTracking.response.InternalApiResponse;
+import com.example.migrosone.courierTracking.model.entity.EventEntity;
 import com.example.migrosone.courierTracking.service.CourierService;
 import com.example.migrosone.courierTracking.service.EventService;
 import com.example.migrosone.courierTracking.service.LocationService;
@@ -20,19 +19,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -52,6 +44,9 @@ class CourierControllerTest {
 
     @Mock
     private LocationService locationService;
+
+    @Mock
+    private EventService eventService;
 
     @InjectMocks
     private CourierController courierController;
@@ -128,5 +123,27 @@ class CourierControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.payload").value(distance))
                 .andExpect(jsonPath("$.hasError").value(false));
+    }
+    @Test
+    void getEventsByCourierId_EntranceOnly() throws Exception {
+        Long courierId = 1L;
+
+        EventEntity event1 = new EventEntity();
+        event1.setId(1L);
+        event1.setCourierId(courierId);
+        event1.setEventName("ENTRANCE");
+        event1.setEventTime(LocalDateTime.now());
+
+        List<EventEntity> events = List.of(event1);
+
+        Mockito.when(eventService.getEventsByCourierId(eq(courierId))).thenReturn(events);
+
+        mockMvc.perform(get("/api/courier/events/{courierId}", courierId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.payload[0].id").value(event1.getId()))
+                .andExpect(jsonPath("$.payload[0].eventName").value("ENTRANCE"))
+                .andExpect(jsonPath("$.hasError").value(false));
+
+        Mockito.verify(eventService, Mockito.times(1)).getEventsByCourierId(eq(courierId));
     }
 }

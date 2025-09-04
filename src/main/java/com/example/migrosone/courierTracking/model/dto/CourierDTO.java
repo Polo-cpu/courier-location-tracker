@@ -2,8 +2,6 @@ package com.example.migrosone.courierTracking.model.dto;
 
 import lombok.*;
 
-import java.util.UUID;
-
 @Data
 @Getter
 @Setter

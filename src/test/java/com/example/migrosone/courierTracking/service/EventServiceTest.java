@@ -10,17 +10,13 @@ import com.example.migrosone.courierTracking.model.mapper.EventMapper;
 import com.example.migrosone.courierTracking.repository.EventRepository;
 import com.example.migrosone.courierTracking.utils.DummyLocationLoader;
 import com.example.migrosone.courierTracking.utils.GeoUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +47,7 @@ public class EventServiceTest {
         Long courierId = locationEntity.getCourier().getCourierId();
         DummyLocationDTO store = new DummyLocationDTO("Store A", 40.7128, -74.0060);
         List<DummyLocationDTO> storeLocations = Collections.singletonList(store);
+
         Mockito.when(dummyLocationLoader.getLocations()).thenReturn(storeLocations);
         Mockito.when(geoUtils.calculateDistanceForKM(locationEntity.getLat(), locationEntity.getLng(),
                 store.getLat(), store.getLng())).thenReturn(50.0);
@@ -64,6 +61,22 @@ public class EventServiceTest {
         Mockito.verify(dummyLocationLoader, Mockito.times(1)).getLocations();
         Mockito.verify(geoUtils, Mockito.times(1)).calculateDistanceForKM(
                 locationEntity.getLat(), locationEntity.getLng(), store.getLat(), store.getLng());
+    }
+    @Test
+    void testGetEventByCourierId() {
+        Long courierId = 100L;
+        EventEntity mockEvent = new EventEntity(1L, courierId, EventTypeEnum.ENTRANCE.name(), LocalDateTime.now(), "Store A");
+        List<EventEntity> mockEvents = List.of(mockEvent);
+
+        Mockito.when(eventRepository.findByCourierId(courierId)).thenReturn(mockEvents);
+
+        List<EventEntity> events = eventService.getEventsByCourierId(courierId);
+
+        Mockito.verify(eventRepository, Mockito.times(2)).findByCourierId(courierId);
+        assert events.size() == 1;
+        assert events.get(0).getCourierId().equals(courierId);
+        assert events.get(0).getStoreName().equals("Store A");
+        assert events.get(0).getEventName().equals(EventTypeEnum.ENTRANCE.name());
     }
 
     public LocationEntity sampleLocationEntity(){

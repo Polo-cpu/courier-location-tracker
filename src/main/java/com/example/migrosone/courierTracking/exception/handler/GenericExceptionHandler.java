@@ -4,7 +4,6 @@ import com.example.migrosone.courierTracking.exception.*;
 import com.example.migrosone.courierTracking.model.dummy.MessageCodes;
 import com.example.migrosone.courierTracking.response.InternalApiResponse;
 import com.example.migrosone.courierTracking.response.MessageResponse;
-import com.example.migrosone.courierTracking.utils.MessageUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
