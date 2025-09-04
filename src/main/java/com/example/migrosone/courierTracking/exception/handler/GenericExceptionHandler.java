@@ -18,22 +18,22 @@ public class GenericExceptionHandler {
     @ExceptionHandler(CourierNotCreatedException.class)
     public InternalApiResponse<String> handleCourierNotCreatedException(CourierNotCreatedException courierNotCreatedException) {
         return InternalApiResponse.<String>builder()
-                .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(MessageCodes.COURIER_NOT_CREATED))
-                        .description(MessageUtils.getMessage(courierNotCreatedException.getMessageCodes()))
+                .messageResponse(MessageResponse.builder().title(String.valueOf(MessageCodes.ERROR))
+                        .description(String.valueOf(MessageCodes.COURIER_NOT_CREATED))
                         .build())
+                .hasError(true)
                 .httpStatus(HttpStatus.BAD_REQUEST)
-                .errorMessages(Collections.singletonList(courierNotCreatedException.getMessage()))
                 .build();
     }
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(CourierNotFoundException.class)
     public InternalApiResponse<String> handleCourierNotFoundException(CourierNotFoundException courierNotFoundException) {
         return InternalApiResponse.<String>builder()
-                .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(MessageCodes.COURIER_NOT_FOUND))
-                        .description(MessageUtils.getMessage(courierNotFoundException.getMessageCodes()))
+                .messageResponse(MessageResponse.builder().title(String.valueOf(MessageCodes.ERROR))
+                        .description(String.valueOf(MessageCodes.COURIER_NOT_FOUND))
                         .build())
+                .hasError(true)
                 .httpStatus(HttpStatus.NOT_FOUND)
-                .errorMessages(Collections.singletonList(courierNotFoundException.getMessage()))
                 .build();
     }
 
@@ -41,33 +41,33 @@ public class GenericExceptionHandler {
     @ExceptionHandler(DistanceNotFoundException.class)
     public InternalApiResponse<String> handleDistanceNotFoundException(DistanceNotFoundException distanceNotFoundException) {
         return InternalApiResponse.<String>builder()
-                .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(MessageCodes.DISTANCE_NOT_FOUND))
-                        .description(MessageUtils.getMessage(distanceNotFoundException.getMessageCodes()))
+                .messageResponse(MessageResponse.builder().title(String.valueOf(MessageCodes.ERROR))
+                        .description(String.valueOf(MessageCodes.DISTANCE_NOT_FOUND))
                         .build())
+                .hasError(true)
                 .httpStatus(HttpStatus.NOT_FOUND)
-                .errorMessages(Collections.singletonList(distanceNotFoundException.getMessage()))
                 .build();
     }
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EventNotFoundException.class)
     public InternalApiResponse<String> handleEventNotFoundException(EventNotFoundException eventNotFoundException) {
         return InternalApiResponse.<String>builder()
-                .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(MessageCodes.EVENT_NOT_FOUND))
-                        .description(MessageUtils.getMessage(eventNotFoundException.getMessageCodes()))
+                .messageResponse(MessageResponse.builder().title(String.valueOf(MessageCodes.ERROR))
+                        .description(String.valueOf(MessageCodes.EVENT_NOT_FOUND))
                         .build())
+                .hasError(true)
                 .httpStatus(HttpStatus.NOT_FOUND)
-                .errorMessages(Collections.singletonList(eventNotFoundException.getMessage()))
                 .build();
     }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EventNotCreatedException.class)
     public InternalApiResponse<String> handleEventNotCreatedException(EventNotCreatedException eventNotCreatedException) {
         return InternalApiResponse.<String>builder()
-                .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(MessageCodes.EVENT_NOT_CREATED))
-                        .description(MessageUtils.getMessage(eventNotCreatedException.getMessageCodes()))
+                .messageResponse(MessageResponse.builder().title(String.valueOf(MessageCodes.ERROR))
+                        .description(String.valueOf(MessageCodes.EVENT_NOT_CREATED))
                         .build())
+                .hasError(true)
                 .httpStatus(HttpStatus.BAD_REQUEST)
-                .errorMessages(Collections.singletonList(eventNotCreatedException.getMessage()))
                 .build();
     }
 }

@@ -8,6 +8,8 @@ public enum MessageCodes implements IMessageCodes {
     DISTANCE_NOT_FOUND(901),
     SUCCESS(200),
 
+    ERROR(400),
+
     LOCATION_SUCCESSFULLY_CREATED(100),
 
     COURIER_SUCCESSFULLY_CREATED(101),

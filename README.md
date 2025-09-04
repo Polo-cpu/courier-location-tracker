@@ -2,14 +2,12 @@
 A Spring Boot Rest API for tracking courier geolocation.
 
 🚀 Features
-- Create, Read, Update, Delete (CRUD) operations for couriers
-- Tracking courier geolocation
+- Create & retrieve courier, save locations, and calculate total distance traveled
 - RESTful API endpoints
 - In-memory database for simplicity
 - Swagger UI for API documentation
 - Unit tests for core functionality
 - Integration Tests for end-to-end validation
-- Dockerized for easy deployment
 
 🛠️ Tech Stack
 - Java 17
@@ -17,7 +15,6 @@ A Spring Boot Rest API for tracking courier geolocation.
 - H2 Database
 - Spring Data JPA
 - Swagger
-- Docker
 
 ⚙️ Installation and Setup
 1.  Clone the repository:
