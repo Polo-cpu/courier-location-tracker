@@ -9,6 +9,7 @@ import com.example.migrosone.courierTracking.utils.DummyLocationLoader;
 import com.example.migrosone.courierTracking.utils.GeoUtils;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +18,10 @@ import java.util.List;
 import java.util.Optional;
 import com.example.migrosone.courierTracking.model.dummy.EventTypeEnum;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
+
 public class EventService {
 
     private final GeoUtils geoUtils;
@@ -33,7 +35,7 @@ public class EventService {
 
         List<DummyLocationDTO> storeLocations = this.dummyLocationLoader.getLocations();
         for (DummyLocationDTO store : storeLocations) {
-            Double distance = geoUtils.calculateDistanceForMeters(lat, lng, store.getLat(), store.getLng());
+            Double distance = geoUtils.calculateDistanceForKM(lat, lng, store.getLat(), store.getLng());
             if (distance <= DISTANCE_THRESHOLD_METERS) {
                 Optional<EventEntity> latestEventOpt = eventRepository.findFirstByCourierIdOrderByEventTimeDesc(courierId);
                 CourierEvent newEvent = new CourierEvent(
@@ -46,34 +48,15 @@ public class EventService {
                     LocalDateTime latestAllowedTime = latestEventOpt.get().getEventTime().plusMinutes(1);
 
                     if (!newEvent.getTime().isAfter(latestAllowedTime)) {
+                        log.info("Duplicate entrance detected in 1 minute for courierId: {} at store: {}. Event not published.",
+                                courierId, store.getName());
                         return;
                     }
                 }
                 eventRepository.save(eventMapper.toEntity(newEvent));
+                log.info("Entrance event published for courierId: {} at store: {}", courierId, store.getName());
                 break;
             }
         }
     }
 }
-   // public void checkAndPublishReEntranceEvent(UUID courierId, Double lat, Double lng){
-   //     List<DummyLocationDTO> storeLocations = this.dummyLocationLoader.getLocations();
-   //
-   //     for (DummyLocationDTO store : storeLocations){
-   //         Double distance = geoUtils.calculateDistanceForMeters(lat, lng, store.getLat(), store.getLng());
-   //
-   //         if(distance<=DISTANCE_THRESHOLD_METERS) {
-   //             CourierEvent event = new CourierEvent(courierId, "ENTRANCE", LocalDateTime.now());
-   //             EventEntity entity = eventMapper.toEntity(event);
-   //             eventRepository.save(entity);
-   //             break;
-   //         }
-   //     }
-   // }
-   // public void checkAndPublishCourierCreatedEvent(UUID courierId){
-   //     CourierEvent event = new CourierEvent(courierId, "COURIER_CREATED", LocalDateTime.now());
-   //     EventEntity entity = eventMapper.toEntity(event);
-   //     eventRepository.save(entity);
-   // }
-   // public List<EventEntity> getAllEventsByCourierId(UUID courierId){
-   //     return eventRepository.findAll();
-   // }

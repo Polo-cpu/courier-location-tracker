@@ -20,6 +20,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+
 @ExtendWith(MockitoExtension.class)
 public class LocationServiceTest {
 
@@ -45,7 +48,7 @@ public class LocationServiceTest {
 
         Mockito.when(locationRepository.findAllMovesByCourierId(courier.getCourierId()))
                 .thenReturn(locations);
-        Mockito.when(geoUtils.calculateDistanceForMeters(locations.get(0).getLat(), locations.get(0).getLng(),
+        Mockito.when(geoUtils.calculateDistanceForKM(locations.get(0).getLat(), locations.get(0).getLng(),
                 locations.get(1).getLat(), locations.get(1).getLng()))
                 .thenReturn(1000.0);
         Double totalDistance = locationService.getTotalTravelledDistance(courier.getCourierId());
@@ -62,42 +65,43 @@ public class LocationServiceTest {
     }
 
     @Test
-    void testSaveCourierLocation() {
+    void testSaveCourierLocation_Success() {
         // Arrange
-        CourierEntity courier = new CourierEntity(1L, 100L, "John Doe", "1234567890");
-        LocationEntity expectedLocation = new LocationEntity(null, LocalDateTime.now(), courier, 40.7128, -74.0060);
+        Long courierId = 1L;
+        double latitude = 40.7128;
+        double longitude = -74.0060;
 
-        // Mock the CourierRepository to return the courier
-        Mockito.when(courierRepository.findByCourierId(courier.getCourierId()))
-                .thenReturn(Optional.of(courier));
-
-        // Mock the LocationRepository to save the location
-        Mockito.when(locationRepository.save(Mockito.any())).thenAnswer(invocation -> {
-            LocationEntity location = invocation.getArgument(0);
-            location.setId(1L); // Simulate the database assigning an ID
-            return location;
-        });
-
-        // Create a LocationDTO with the same courierId
         LocationDTO locationDTO = new LocationDTO();
-        locationDTO.setCourierId(courier.getCourierId());
-        locationDTO.setLat(expectedLocation.getLat());
-        locationDTO.setLng(expectedLocation.getLng());
+        locationDTO.setCourierId(courierId);
+        locationDTO.setLat(latitude);
+        locationDTO.setLng(longitude);
+
+        CourierEntity courier = new CourierEntity();
+        courier.setCourierId(courierId);
+
+        LocationEntity locationEntity = new LocationEntity();
+        locationEntity.setLat(latitude);
+        locationEntity.setLng(longitude);
+        locationEntity.setCourier(courier);
+
+        Mockito.when(courierRepository.findByCourierId(eq(courierId))).thenReturn(Optional.of(courier));
+        Mockito.when(locationMapper.toEntity(any(LocationDTO.class))).thenReturn(locationEntity);
+        Mockito.when(locationRepository.save(any(LocationEntity.class))).thenReturn(locationEntity);
 
         // Act
-        Optional<LocationEntity> savedLocation = locationService.saveCourierLocation(locationDTO);
+        Optional<LocationEntity> result = locationService.saveCourierLocation(locationDTO);
 
         // Assert
-        Assertions.assertTrue(savedLocation.isPresent());
-        Assertions.assertEquals(expectedLocation.getLat(), savedLocation.get().getLat());
-        Assertions.assertEquals(expectedLocation.getLng(), savedLocation.get().getLng());
-        Assertions.assertEquals(courier, savedLocation.get().getCourier());
-        Mockito.verify(courierRepository, Mockito.times(1)).findByCourierId(courier.getCourierId());
-        Mockito.verify(locationRepository, Mockito.times(1)).save(Mockito.any());
+        Assertions.assertTrue(result.isPresent());
+        Assertions.assertEquals(latitude, result.get().getLat());
+        Assertions.assertEquals(longitude, result.get().getLng());
+        Assertions.assertEquals(courier, result.get().getCourier());
+        Mockito.verify(courierRepository, Mockito.times(1)).findByCourierId(courierId);
+        Mockito.verify(locationRepository, Mockito.times(1)).save(locationEntity);
     }
 
     @Test
-    void testSaveCourierLocation_CourierNotFound() {
+    void testSaveCourierLocation_Error() {
         // Arrange
         Mockito.when(courierRepository.findByCourierId(Mockito.anyLong()))
                 .thenReturn(Optional.empty());

@@ -9,12 +9,13 @@ import com.example.migrosone.courierTracking.model.mapper.LocationMapper;
 import com.example.migrosone.courierTracking.repository.CourierRepository;
 import com.example.migrosone.courierTracking.repository.LocationRepository;
 import com.example.migrosone.courierTracking.utils.GeoUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @Service
 public class LocationService {
 
@@ -36,6 +37,7 @@ public class LocationService {
     public Double getTotalTravelledDistance(Long courierId) {
         List<LocationEntity> locations = locationRepository.findAllMovesByCourierId(courierId);
         if (locations.isEmpty() || locations.size() < 2) {
+            log.error("Not enough location data to calculate distance for courierId: {}", courierId);
             return 0.0;
         }
         Double totalDistance = 0.0;
@@ -43,9 +45,10 @@ public class LocationService {
             LocationEntity fromDistance = locations.get(i);
             LocationEntity toDistance = locations.get(i + 1);
 
-            totalDistance += geoUtils.calculateDistanceForMeters(fromDistance.getLat(), fromDistance.getLng(),
+            totalDistance += geoUtils.calculateDistanceForKM(fromDistance.getLat(), fromDistance.getLng(),
                     toDistance.getLat(), toDistance.getLng());
         }
+        log.info("Total travelled distance for courierId {}: {} km", courierId, totalDistance);
         return totalDistance;
 
     }

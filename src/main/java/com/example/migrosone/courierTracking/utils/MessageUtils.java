@@ -10,17 +10,15 @@ import java.util.ResourceBundle;
 @Slf4j
 @UtilityClass
 public class MessageUtils {
-    private static final String RESOURCE_BUNDLE_NAME = "messages";
-    private static final String SPECIAL_CHARACTER = "__";
-    public static String getMessage(IMessageCodes messageCodes) {
+    private static final String RESOURCE_BUNDLE_NAME = "ApplicationMessages";
 
-        String messageKey = null;
+    public static String getMessage(IMessageCodes messageCode) {
+
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME);
+        String messageKey = String.valueOf(messageCode.getMessage());
         try {
-            var resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME);
-            messageKey = messageCodes.getClass().getSimpleName() + SPECIAL_CHARACTER + messageCodes;
             return resourceBundle.getString(messageKey);
-        } catch (MissingResourceException missingResourceException) {
-            log.error("message not found for the key: {} ", messageKey);
+        } catch (MissingResourceException e) {
             return null;
         }
     }

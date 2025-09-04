@@ -11,7 +11,7 @@ import java.util.List;
 public class InternalApiResponse<T> {
     private MessageResponse messageResponse;
     private T payload;
-    private boolean hasError;
+    private Boolean hasError;
     private List<String> errorMessages;
     private HttpStatus httpStatus;
 }

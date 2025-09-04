@@ -8,7 +8,6 @@ import com.example.migrosone.courierTracking.model.entity.CourierEntity;
 import com.example.migrosone.courierTracking.model.mapper.CourierMapper;
 import com.example.migrosone.courierTracking.repository.CourierRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +28,8 @@ public class CourierService {
     @Transactional
     public Optional<CourierEntity> createCourier(CourierDTO courierDTO) {
         try {
-            log.info("Creating courier with id: {}", courierDTO.getCourierId());
             CourierEntity courier = courierRepository.save(courierMapper.toEntity(courierDTO));
+            log.info("Courier created with id: {}", courierDTO.getCourierId());
             return Optional.of(courier);
         }catch (Exception e){
             throw new CourierNotCreatedException(MessageCodes.COURIER_NOT_CREATED);

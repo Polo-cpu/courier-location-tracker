@@ -52,7 +52,7 @@ public class EventServiceTest {
         DummyLocationDTO store = new DummyLocationDTO("Store A", 40.7128, -74.0060);
         List<DummyLocationDTO> storeLocations = Collections.singletonList(store);
         Mockito.when(dummyLocationLoader.getLocations()).thenReturn(storeLocations);
-        Mockito.when(geoUtils.calculateDistanceForMeters(locationEntity.getLat(), locationEntity.getLng(),
+        Mockito.when(geoUtils.calculateDistanceForKM(locationEntity.getLat(), locationEntity.getLng(),
                 store.getLat(), store.getLng())).thenReturn(50.0);
         when(eventRepository.findFirstByCourierIdOrderByEventTimeDesc(courierId)).thenReturn(Optional.empty());
 
@@ -62,7 +62,7 @@ public class EventServiceTest {
         eventService.checkAndPublishEntranceEvent(courierId, locationEntity.getLat(), locationEntity.getLng());
         Mockito.verify(eventRepository, Mockito.times(1)).save(expectedEventEntity);
         Mockito.verify(dummyLocationLoader, Mockito.times(1)).getLocations();
-        Mockito.verify(geoUtils, Mockito.times(1)).calculateDistanceForMeters(
+        Mockito.verify(geoUtils, Mockito.times(1)).calculateDistanceForKM(
                 locationEntity.getLat(), locationEntity.getLng(), store.getLat(), store.getLng());
     }
 

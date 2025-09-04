@@ -1,9 +1,6 @@
 package com.example.migrosone.courierTracking.exception.handler;
 
-import com.example.migrosone.courierTracking.exception.CourierNotCreatedException;
-import com.example.migrosone.courierTracking.exception.CourierNotFoundException;
-import com.example.migrosone.courierTracking.exception.DistanceNotFoundException;
-import com.example.migrosone.courierTracking.exception.EventNotFoundException;
+import com.example.migrosone.courierTracking.exception.*;
 import com.example.migrosone.courierTracking.model.dummy.MessageCodes;
 import com.example.migrosone.courierTracking.response.InternalApiResponse;
 import com.example.migrosone.courierTracking.response.MessageResponse;
@@ -24,46 +21,53 @@ public class GenericExceptionHandler {
                 .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(MessageCodes.COURIER_NOT_CREATED))
                         .description(MessageUtils.getMessage(courierNotCreatedException.getMessageCodes()))
                         .build())
-                .hasError(true)
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .errorMessages(Collections.singletonList(courierNotCreatedException.getMessage()))
                 .build();
     }
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(CourierNotFoundException.class)
     public InternalApiResponse<String> handleCourierNotFoundException(CourierNotFoundException courierNotFoundException) {
         return InternalApiResponse.<String>builder()
                 .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(MessageCodes.COURIER_NOT_FOUND))
                         .description(MessageUtils.getMessage(courierNotFoundException.getMessageCodes()))
                         .build())
-                .hasError(true)
-                .httpStatus(HttpStatus.BAD_REQUEST)
+                .httpStatus(HttpStatus.NOT_FOUND)
                 .errorMessages(Collections.singletonList(courierNotFoundException.getMessage()))
                 .build();
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(DistanceNotFoundException.class)
     public InternalApiResponse<String> handleDistanceNotFoundException(DistanceNotFoundException distanceNotFoundException) {
         return InternalApiResponse.<String>builder()
                 .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(MessageCodes.DISTANCE_NOT_FOUND))
                         .description(MessageUtils.getMessage(distanceNotFoundException.getMessageCodes()))
                         .build())
-                .hasError(true)
-                .httpStatus(HttpStatus.BAD_REQUEST)
+                .httpStatus(HttpStatus.NOT_FOUND)
                 .errorMessages(Collections.singletonList(distanceNotFoundException.getMessage()))
                 .build();
     }
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EventNotFoundException.class)
     public InternalApiResponse<String> handleEventNotFoundException(EventNotFoundException eventNotFoundException) {
         return InternalApiResponse.<String>builder()
                 .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(MessageCodes.EVENT_NOT_FOUND))
                         .description(MessageUtils.getMessage(eventNotFoundException.getMessageCodes()))
                         .build())
-                .hasError(true)
-                .httpStatus(HttpStatus.BAD_REQUEST)
+                .httpStatus(HttpStatus.NOT_FOUND)
                 .errorMessages(Collections.singletonList(eventNotFoundException.getMessage()))
+                .build();
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EventNotCreatedException.class)
+    public InternalApiResponse<String> handleEventNotCreatedException(EventNotCreatedException eventNotCreatedException) {
+        return InternalApiResponse.<String>builder()
+                .messageResponse(MessageResponse.builder().title(MessageUtils.getMessage(MessageCodes.EVENT_NOT_CREATED))
+                        .description(MessageUtils.getMessage(eventNotCreatedException.getMessageCodes()))
+                        .build())
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .errorMessages(Collections.singletonList(eventNotCreatedException.getMessage()))
                 .build();
     }
 }
